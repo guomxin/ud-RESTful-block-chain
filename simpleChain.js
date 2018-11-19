@@ -34,8 +34,9 @@ class Blockchain{
   }
 
   // Add new block
-  addBlock(newBlock){
+  addBlock(data){
     let self = this;
+    let newBlock = new Block(data);
     return new Promise(function(resolve, reject) {
       self.getBlockHeight()
       .then((height) => {
@@ -58,7 +59,7 @@ class Blockchain{
             // Saving block object to LevelDB
             db.addLevelDBData(newBlock.height, JSON.stringify(newBlock))
             .then((result) => {
-              resolve(result);
+              resolve(newBlock);
             })
             .catch((err) => {
               reject(err);
@@ -81,7 +82,7 @@ class Blockchain{
             // Saving block object to LevelDB
             db.addLevelDBData(newBlock.height, JSON.stringify(newBlock))
             .then((result) => {
-              resolve(result);
+              resolve(newBlock);
             })
             .catch((err) => {
               reject(err);
@@ -116,7 +117,11 @@ class Blockchain{
       return new Promise(function(resolve, reject) {
         db.getLevelDBData(blockHeight)
         .then((result) => {
-          resolve(JSON.parse(result));
+          if (result) {
+            resolve(JSON.parse(result));
+          } else {
+            resolve(undefined);
+          }
         })
         .catch((err) => {
           reject(err);
@@ -200,25 +205,5 @@ class Blockchain{
     }
 }
 
-/* ===== Testing ==============================================================|
-|  ===========================================================================*/
-let myBlockChain = new Blockchain();
-/*
-(function theLoop (i) {
-  setTimeout(function () {
-      let blockTest = new Block("Test Block - " + (i + 1));
-      myBlockChain.addBlock(blockTest).then((result) => {
-          console.log(result);
-          i++;
-          if (i < 10) theLoop(i);
-      });
-  }, 1000);
-})(0);
-*/
-myBlockChain.validateChain()
-.then((result) => {
-  console.log(result);
-})
-.catch((err) => {
-  console.log(err);
-})
+// Export the class
+module.exports.Blockchain = Blockchain;
