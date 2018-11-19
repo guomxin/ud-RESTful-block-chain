@@ -1,6 +1,6 @@
-# RESTful Web API with Node.js Framework
+# RESTful Web API with Express.js
 
-Build a RESTful API using [Express](https://expressjs.com) framework that will interface with the private blockchain.
+Build a RESTful API using [Express.js](https://expressjs.com) framework that will interface with the private blockchain.
 
 ## Getting Started
 
